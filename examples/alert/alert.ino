@@ -128,16 +128,16 @@ void setup() {
   Serial.print(temperatureLimit.highClear);
   Serial.print("               low set:");
   Serial.println(temperatureLimit.lowSet);
-  Serial.println("--------------------------------------------------------");
+  Serial.println("-------------------------------------------     -------------");
   /**
    * readAlertState: 读取ALERT引脚的状态.
    * @return 高电平则返回1，低电平则返回0.
    */
    //此判断的作用是，初始化ALERT的状态
-  if(readAlertState() == 1){
-    alertState==1;
+  if(sht3x.readAlertState() == 1){
+    alertState = 1;
   } else {
-    alertState==0;
+    alertState = 0;
   }
 }
 void loop() {
