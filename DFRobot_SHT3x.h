@@ -22,9 +22,7 @@
 #endif
 #include <Wire.h>
 
-
-
-#define ENABLE_DBG
+//#define ENABLE_DBG
 
 #ifdef ENABLE_DBG
 #define DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] "); Serial.println(__VA_ARGS__);}
@@ -56,7 +54,7 @@
 #define CMD_STOP_PERIODIC_ACQUISITION_MODE (0x3093)
 #define CMD_SOFT_RESET                     (0x30A2)// soft reset
 #define CMD_HEATER_ENABLE                  (0x306D)// enabled heater
-#define CMD_HEATER_DISABLE               (0x3066)// disable heater
+#define CMD_HEATER_DISABLE                 (0x3066)// disable heater
 #define CMD_READ_STATUS_REG                (0xF32D)// read status register
 #define CMD_CLEAR_STATUS_REG               (0x3041)// clear status register
 
@@ -217,6 +215,11 @@ public:
    * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
    */
   void clearStatusRegister();
+  /**
+   * @brief 读取ALERT引脚的状态.
+   * @return 高电平则返回1，低电平则返回0.
+   */
+  uint8_t readAlertState();
   /**
    * @brief 设置温度阈值温度和警报清除温度
    * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。

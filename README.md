@@ -43,114 +43,107 @@ To use this library, first download the library file, paste it into the \Arduino
 ## Methods
 
 ```C++
-/*!
- * @brief 构造函数
- * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
- * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
- * @param RST 芯片复位引脚，默认为4.
- * @n IIC地址是由芯片上的引脚addr决定。
- * @n 当addr与VDD连接,芯片IIC地址为：0x45。
- * @n 当addr与VSS连接,芯片IIC地址为：0x44。
- */
-DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
+  /*!
+   * @brief 构造函数
+   * @param pWire I2C总线指针对象，构造设备，可传参数也可不传参数，默认Wire。
+   * @param address 芯片IIC地址,共有两个可选地址0x44、0x45(默认为0x44)。
+   * @param RST 芯片复位引脚，默认为4.
+   * @n IIC地址是由芯片上的引脚addr决定。
+   * @n 当addr与VDD连接,芯片IIC地址为：0x45。
+   * @n 当addr与VSS连接,芯片IIC地址为：0x44。
+   */
+  DFRobot_SHT3x(TwoWire *pWire = &Wire, uint8_t address = 0x44,uint8_t RST = 4);
+  
+  /**
+   * @brief 初始化函数
+   * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
+   */
+  int begin();
+  /**
+   * @brief 通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
+   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   */
+  bool softReset();
+  /**
+   * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，并清除ALERT引脚的警报。
+   * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
+   */
+  bool  pinReset();
+  /**
+   * @brief 在单次测量模式下获取温湿度数据
+   * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
+   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体
+   * @n 状态码为0则表明数据正确
+   */
+  sRHAndTemp_t readTempAndHumidity(eRepeatability_t repeatability);
+  /**
+   * @brief 进入周期测量模式，并设置可重复性(芯片在两次相同测量条件下测量到的数据的差值)、读取频率。
+   * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
+   * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
+   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   */          
+  bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
+  
+  /**
+   * @brief 在周期测量模式下获取温湿度数据.
+   * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
+   * @n 状态码为0则表明数据正确.
+   */
+  sRHAndTemp_t readTempAndHumidity();
 
-/**
- * @brief 初始化函数
- * @return 返回0表示初始化成功，返回其他值表示初始化失败，返回错误码
- */
-int begin();
-
-/**
- * @brief 通过IIC发送命令复位，进入芯片的默认模式单次测量模式，关闭加热器，并清除ALERT引脚的警报。
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- */
-bool softReset();
-
-/**
- * @brief 通过芯片的复位引脚进行复位，进入芯片的默认模式单次测量模式，并清除ALERT引脚的警报。
- * @return 状态寄存器有一数据位能检测芯片是否进行了复位，返回true则表示成功
- */
-bool  pinReset();
-
-/**
- * @brief 在单次测量模式下获取温湿度数据
- * @param repeatability 设置读取温湿度数据的可重复性，eRepeatability_t类型的数据
- * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体
- * @n 状态码为0则表明数据正确
- */
-sRHAndTemp_t readTempAndHumidity(eRepeatability_t repeatability);
-
-/**
- * @brief 进入周期测量模式，并设置可重复性、读取频率。
- * @param repeatability 读取温湿度数据的可重复性，eRepeatability_t类型的数据
- * @param measureFreq   读取数据的频率，eMeasureFrequency_t类型的数据
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- */          
-bool setMeasurementMode(eRepeatability_t repeatability,eMeasureFrequency_t measureFreq);
-
-/**
- * @brief 在周期测量模式下获取温湿度数据.
- * @return  返回包含有温度(°C)、湿度(%RH)、状态码的结构体.
- * @n 状态码为0则表明数据正确.
- */
-sRHAndTemp_t readTempAndHumidity();
-
-/**
- * @brief 从周期读取数据模式退出。
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- */
-bool stopPeriodicMode();
-
-/**
- * @brief 打开芯片里面的加热器.
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- */
-bool heaterEnable();
-
-/**
- * @brief 关闭芯片里面的加热器.
- * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
- */
-bool heaterDisable();
-/**
- * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
- * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
- */
-void clearStatusRegister();
-
-/**
- * @brief 设置温度阈值温度和警报清除温度
- * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
- * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
- * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
- * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
- * @return 返回0则表示设置成功.
- */
-uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
-
-/**
- * @brief 设置相对湿度阈值温度和警报清除湿度
- * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
- * @param highClear 高湿度警报清除点，当相对湿度于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
- * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
- * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
- * @return 返回0则表示设置成功.
- */
-uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
-
-/**
- * @brief 读取温度阈值温度和警报清除温度
- * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
- */
-slimitData_t readTemperatureLimitC();
-
-/**
- * @brief 读取相对湿度阈值温度和警报清除湿度
- * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
- */
-slimitData_t readHumidityLimitRH();
-
-
+  /**
+   * @brief 从周期读取数据模式退出。
+   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   */
+  bool stopPeriodicMode();
+  /**
+   * @brief 打开芯片里面的加热器.
+   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   */
+  bool heaterEnable();
+  /**
+   * @brief 关闭芯片里面的加热器.
+   * @return 通过读取状态寄存器来判断命令是否成功被执行，返回true则表示成功
+   */
+  bool heaterDisable();
+  /**
+   * @brief All flags (Bit 15, 11, 10, 4) in the status register can be cleared (set to zero)
+   * @n  把bit：15 设置为0后ALERT引脚才能正常工作，否则将一直处于高电平。
+   */
+  void clearStatusRegister();
+  /**
+   * @brief 读取ALERT引脚的状态.
+   * @return 高电平则返回1，低电平则返回0.
+   */
+  uint8_t readAlertState();
+  /**
+   * @brief 设置温度阈值温度和警报清除温度
+   * @param highset 高温报警点，当温度大于此值时ALERT引脚产生报警信号。
+   * @param highClear 高温警报清除点，当温度大于highset产生报警信号，而温度小于此值报警信号则被清除。
+   * @param lowclear 低温警报清除点，当温度小于lowset产生报警信号，而温度大于此值时报警信号则被清除。
+   * @param lowset 低温报警点，当温度小于此值时ALERT引脚产生报警信号。
+   * @return 返回0则表示设置成功.
+   */
+  uint8_t  setTemperatureLimitC(float highset,float highclear,float lowclear, float lowset);
+  /**
+   * @brief 设置相对湿度阈值温度和警报清除湿度
+   * @param highset 高湿度报警点，当相对湿度大于此值时ALERT引脚产生报警信号。
+   * @param highClear 高湿度警报清除点，当相对湿度于highset产生报警信号，而相对湿度小于此值报警信号则被清除。
+   * @param lowclear 低湿度警报清除点，当相对湿度小于lowset产生报警信号，而相对湿度大于此值时报警信号则被清除。
+   * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
+   * @return 返回0则表示设置成功.
+   */
+  uint8_t  setHumidityLimitRH(float highset,float highclear,float lowclear, float lowset);
+  /**
+   * @brief 读取温度阈值温度和警报清除温度
+   * @return slimitData_t类型的结构体里面包含了高温报警点、高温警报清除点、低温警报清除点、低温报警点,状态码
+   */
+  slimitData_t readTemperatureLimitC();
+  /**
+   * @brief 读取相对湿度阈值温度和警报清除湿度
+   * @return slimitData_t类型的结构体里面包含了高湿度报警点、高湿度警报清除点、低湿度警报清除点、低湿度报警点,状态码
+   */
+  slimitData_t readHumidityLimitRH();
 ```
 
 ## Compatibility

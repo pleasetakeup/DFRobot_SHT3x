@@ -94,6 +94,15 @@ void DFRobot_SHT3x::clearStatusRegister(){
   writeCommand(CMD_CLEAR_STATUS_REG,2);
   delay(10);
 }
+uint8_t DFRobot_SHT3x::readAlertState(){
+  DFRobot_SHT3x::sStatusRegister_t registerRaw;
+  registerRaw = readStatusRegister();
+  if(registerRaw.humidityAlert == 1 || registerRaw.temperatureAlert == 1){
+    return 1;
+  } else {
+    return 0;
+  }
+}
 DFRobot_SHT3x::sRHAndTemp_t DFRobot_SHT3x::readTempAndHumidity(eRepeatability_t repeatability)
 {
   uint8_t rawData[6];

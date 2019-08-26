@@ -96,7 +96,7 @@ void setup() {
    * @param lowset 低湿度报警点，当相对湿度小于此值时ALERT引脚产生报警信号。
    * @note 填入的数值应该为整数。 
    */
-  sht3x.setHumidityLimitRH(60,58,20, 19);
+  sht3x.setHumidityLimitRH(60,58,20,19);
   Serial.println("----------------------警报检测-------------------------------");
   Serial.println("--------------当温湿度超出阈值范围就会产生警报---------------");
   Serial.println("----------------------温度限制(°C)---------------------------");
@@ -128,7 +128,17 @@ void setup() {
   Serial.print(temperatureLimit.highClear);
   Serial.print("               low set:");
   Serial.println(temperatureLimit.lowSet);
-  
+  Serial.println("--------------------------------------------------------");
+  /**
+   * readAlertState: 读取ALERT引脚的状态.
+   * @return 高电平则返回1，低电平则返回0.
+   */
+   //此判断的作用是，初始化ALERT的状态
+  if(readAlertState() == 1){
+    alertState==1;
+  } else {
+    alertState==0;
+  }
 }
 void loop() {
   /**
@@ -139,7 +149,7 @@ void loop() {
   DFRobot_SHT3x::sRHAndTemp_t data=sht3x.readTempAndHumidity();
   if(data.ERR == 0){
     Serial.print("环境温度(°C):");
-    Serial.print(data.Temperature);
+    Serial.print(data.TemperatureC);
     Serial.print(" C        ");
     Serial.print("相对湿度(%RH):");
     Serial.print(data.Humidity);
