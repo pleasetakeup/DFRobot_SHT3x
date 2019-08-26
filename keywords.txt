@@ -1,0 +1,52 @@
+#######################################
+# Syntax Coloring Map For DFRobot_SHT3x
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+DFRobot_SHT3x	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+softReset	KEYWORD2
+pinReset	KEYWORD2
+readTempAndHumidity	KEYWORD2
+setMeasurementMode	KEYWORD2
+stopPeriodicMode	KEYWORD2
+heaterEnable	KEYWORD2
+heaterDisable	KEYWORD2
+clearStatusRegister	KEYWORD2
+setTemperatureLimitC	KEYWORD2
+setHumidityLimitRH	KEYWORD2
+readTemperatureLimitC	KEYWORD2
+readHumidityLimitRH	KEYWORD2
+slimitData_t	KEYWORD2
+sRHAndTemp_t	KEYWORD2
+highSet	KEYWORD2
+highClear	KEYWORD2
+lowClear	KEYWORD2
+lowSet	KEYWORD2
+Temperature	KEYWORD2
+Humidity	KEYWORD2
+ERR	KEYWORD2
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+eRepeatability_High	LITERAL1
+eRepeatability_Medium	LITERAL1
+eRepeatability_Low	LITERAL1
+eMeasureFreq_Hz5	LITERAL1
+eMeasureFreq_1Hz	LITERAL1
+eMeasureFreq_2Hz	LITERAL1
+eMeasureFreq_4Hz	LITERAL1   
+eMeasureFreq_10Hz	LITERAL1
